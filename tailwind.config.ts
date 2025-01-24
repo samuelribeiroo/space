@@ -12,6 +12,9 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      borderColor: {
+        lightGray: "hsl(0, 0%, 14.9%)",
+      },
     },
   },
   plugins: [],
