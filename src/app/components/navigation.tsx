@@ -1,15 +1,16 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
-import { links } from "@/constants/data";
-import { cn } from "@/utils/clsx";
 import Image from "next/image";
 import SwitchThemes from "./ui/switch-themes";
+import { DesktopNavigation, MobileMenu } from "./ui/header-ui";
 
 export default function Navigation() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  
+  const handleToggleMenu = () => setIsOpen(!isOpen);
 
   return (
     <>
@@ -23,47 +24,23 @@ export default function Navigation() {
               height={48}
               className="rounded-full p-4 hover:profile-spinner"
               fetchPriority="high"
+              loading="lazy"
             />
           </Link>
 
           <div className="hidden md:flex md:items-center md:space-x-6">
-            {links.map(({ href, label }) => (
-              <Link href={href} key={href} className="from-neutral-100 text-sm">
-                {label}
-              </Link>
-            ))}
+            <DesktopNavigation />
             <SwitchThemes />
           </div>
 
           <div className="md:hidden">
-            <button className="size-10" onClick={() => setIsOpen(!isOpen)}>
+            <button className="size-10" onClick={handleToggleMenu}>
               {isOpen ? <X className="size-4" /> : <Menu className="size-4" />}
             </button>
           </div>
         </nav>
 
-        <div
-          className={cn(
-            "fixed inset-x-0 top-[64px] z-50 h-[calc(100vh-64px)] md:hidden",
-            isOpen ? "block" : "hidden"
-          )}
-        >
-          <div className="container flex flex-col space-y-4 p-4">
-            {links.map(({ href, label }) => (
-              <Link
-                href={href}
-                key={href}
-                className="from-neutral-100 text-sm"
-                onClick={() => setIsOpen(!isOpen)}
-              >
-                {label}
-              </Link>
-            ))}
-            <div className="pt-4">
-              <SwitchThemes />
-            </div>
-          </div>
-        </div>
+        <MobileMenu isOpen={isOpen} onCloseMenu={handleToggleMenu} />
       </header>
     </>
   );
