@@ -31,7 +31,7 @@ function DesktopNavigation() {
             </motion.span>
           </Link>
           <motion.div
-            className="absolute inset-0 rounded-lg bg-neutral-800/50"
+            className="absolute inset-0 rounded-lg bg-zinc-700/95"
             initial={false}
             animate={{
               opacity: hoveredItem === href ? 1 : 0,
@@ -54,25 +54,42 @@ function MobileMenu({ isOpen, onCloseMenu }: MobileMenuProps) {
   return (
     <>
       <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isOpen ? 1 : 0 }}
+        className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm md:hidden"
+        onClick={onCloseMenu}
+        style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
+      />
+
+
+      <motion.div
         initial={false}
-        animate={
-          isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }
-        }
-        className="fixed inset-x-0 top-[64px] z-50 overflow-hidden md:hidden"
+        animate={isOpen ? {
+          scale: 1,
+          opacity: 1,
+          transition: { type: 'spring', stiffness: 300, damping: 20 }
+        } : {
+          scale: 0.95,
+          opacity: 0,
+          transition: { duration: 0.2 }
+        }}
+        className="relative z-50 mx-4 p-6 md:hidden"
+        style={{ 
+          display: isOpen ? 'block' : 'none',
+          pointerEvents: isOpen ? 'auto' : 'none'
+        }}
       >
-        <div className="container flex flex-col space-y-4 p-4">
+        <div className="flex flex-col space-y-4">
           {links.map(({ href, label }) => (
             <motion.div
               key={href}
               whileHover={{ x: 10 }}
-              className="rounded-lg"
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              transition={{ type: "spring", stiffness: 300 }}
             >
               <Link
                 href={href}
-                key={href}
-                className="from-neutral-100 text-sm"
-                onClick={onCloseMenu} 
+                className="text-sm font-medium text-neutral-100 hover:text-white"
+                onClick={onCloseMenu}
               >
                 {label}
               </Link>
@@ -88,3 +105,5 @@ function MobileMenu({ isOpen, onCloseMenu }: MobileMenuProps) {
 }
 
 export { DesktopNavigation, MobileMenu };
+
+// left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-xl border bg-background/95
