@@ -17,7 +17,7 @@ const groteskFont = Space_Grotesk({
 const interFont = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-})
+});
 
 export const metadata: Metadata = {
   title: "Samuel Ribeiro ⚡",
@@ -34,14 +34,18 @@ export default function RootLayout({
       <body
         className={`${interFont.variable} ${interFont.variable} antialiased`}
       >
-        <ThemeProvider 
-        attribute='class'
-        enableSystem
-        disableTransitionOnChange
-        defaultTheme="dark"
+        <ThemeProvider
+          attribute="class"
+          enableSystem
+          disableTransitionOnChange
+          defaultTheme="dark"
         >
-        <Navigation />
-        {children}
+          <div className="dynamic-background">
+            <div className="background-radial absolute bottom-0 left-0 right-0 top-0">
+            <Navigation />
+            {children}
+            </div>
+          </div>
         </ThemeProvider>
       </body>
     </html>
