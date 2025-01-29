@@ -4,13 +4,15 @@ import { ArrowRight, Plus } from "lucide-react";
 import { BlurFade } from "./ui/blur-fade";
 import Button, { SizeButton, VariantButton } from "./ui/button";
 import Link from "next/link";
-import { myself } from "@/constants/data";
+import { links, myself } from "@/constants/data";
 import useFetchPosts from "@/hooks/useFetchPosts";
 import SocialMediaLinks from "./ui/social-media";
 import IntroductionContent from "./ui/introduction-content";
 
 const [data] = myself;
 const { name, role, buttonTitle1, buttonTitle2 } = data;
+
+const linksHref = links.map((link) => link.href);
 
 export default function Introduction() {
   const { filteredPosts } = useFetchPosts();
@@ -20,7 +22,7 @@ export default function Introduction() {
   return (
     <>
       <section id="header" className="introduction-style">
-        <div className="flex flex-col space-y-3">
+        <div className="d-flex-col space-y-3">
           <BlurFade delay={0.25} inView>
             <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
               {`I'm ${name}`}
@@ -29,18 +31,18 @@ export default function Introduction() {
           <BlurFade
             delay={0.25 * 2}
             inView
-            className="flex flex-col space-y-5 items-left"
+            className="d-flex-col space-y-5 items-left"
           >
             <span className="text-xl text-pretty tracking-tighter sm:text-3xl xl:text-4xl/none">
               {role}
             </span>
-            <Link href={"/articles"}>
+            <Link href={`${linksHref[0]}`}>
               <Button
                 variant={VariantButton.Informative}
                 size={SizeButton.Lg}
                 className="cursor-pointer"
               >
-                <div className="flex items-center justify-between space-x-3 mr-1">
+                <div className="d-flex space-x-3 mr-1">
                   <span className="rounded bg-emerald-600 px-2 py-0.5 text-sm font-grotesk text-white">
                     New article
                   </span>
@@ -51,8 +53,8 @@ export default function Introduction() {
             </Link>
             <SocialMediaLinks />
             <IntroductionContent />
-            <div className="flex items-left gap-8 ml-4 justify-center sm:items-center sm: gap-2">
-              <Link href={"/about"}>
+            <div className="flex items-center justify-center ml-3 gap-3 lg:justify-start">
+              <Link href={`${linksHref[1]}`}>
                 <Button
                   variant={VariantButton.Default}
                   size={SizeButton.Default}
@@ -62,7 +64,7 @@ export default function Introduction() {
                 </Button>
               </Link>
 
-              <Link href={"/articles"}>
+              <Link href={`${linksHref[0]}`}>
                 <Button
                   variant={VariantButton.Default}
                   size={SizeButton.Default}
