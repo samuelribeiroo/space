@@ -11,7 +11,7 @@ import {
 } from "../components/ui/post-list-ui";
 
 export default function ArticlesPage() {
-  const { filteredPosts, loading, hasMore, loadMore } = useFetchPosts();
+  const { posts, loading, hasMore, loadMore } = useFetchPosts();
   const observerTarget = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -32,9 +32,8 @@ export default function ArticlesPage() {
   }, [hasMore, loading, loadMore]);
 
   return (
-    <main className="text-white p-4 mt-20 max-w-7xl mx-auto">
       <SectionPostList>
-        {filteredPosts.map((post: Post) => {
+        {posts.map((post: Post) => {
           const { id } = post.sys;
           const { title, slug, excerpt, publishDate, image } = post.fields;
 
@@ -64,8 +63,7 @@ export default function ArticlesPage() {
             </CardPost>
           );
         })}
+       <div ref={observerTarget} className="h-10" />
       </SectionPostList>
-      <div ref={observerTarget} className="h-10" />
-    </main>
   );
 }

@@ -4,24 +4,26 @@ import { PropsWithChildren, ReactNode } from "react";
 
 
 type CardBlogPost = PropsWithChildren<{
-  imageUrl: string;
-  alt: string;
+  imageUrl?: string;
+  alt?: string;
   titlePost?: string;
   overview?: string;
   publishDate?: ReactNode;
 }>;
 
-function SectionPostList({ children }: PropsWithChildren) {
+function SectionPostList({ children }: CardBlogPost) {
   return (
     <>
-    <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <main className="text-white p-4 mt-20 max-w-7xl mx-auto">
+    <section className="section-post-grid">
       {children}
     </section>
+    </main>
     </>
   )
 }
 
-function CardPost({ children }: PropsWithChildren) {
+function CardPost({ children }: CardBlogPost) {
   return (
     <>
       <article className="group article-card">{children}</article>
