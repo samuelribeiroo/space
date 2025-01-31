@@ -1,40 +1,63 @@
-
 import { getPosts } from "@/libs/contentful";
 import { Post, formatContentfulPost } from "@/libs/contentful/utils";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+
+const POSTS_PER_PAGE = 10;
 
 export default function useFetchPosts() {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [posts, setPosts] = useState<Post[]>([])
-  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [page, setPage] = useState(1);
+  const [loading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
-  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = event => {
-    setSearchTerm(event.target.value)
-  }
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    setSearchTerm(event.target.value);
+    setPage(1);
+  };
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const fetchedPosts = await getPosts();
+  {/* 
+    Fetch posts and memorize the reference to avoid uncessary recriation 
+    and second things its calculate the logic of pagination
+    */}
+  const fetchPosts = useCallback(async (pageNumber: number) => {
+    try {
+      setIsLoading(true);
+      const skip = (pageNumber - 1) * POSTS_PER_PAGE;
+      const fetchedPosts = await getPosts(skip, POSTS_PER_PAGE);
       const mappedPosts: Post[] = fetchedPosts.map(formatContentfulPost);
-      setPosts(mappedPosts);
-      setFilteredPosts(mappedPosts);
-    };
-
-    fetchPosts();
+      setPosts((prev) =>
+        pageNumber === 1 ? mappedPosts : [...prev, ...mappedPosts]
+      ); // here its updated the state that begins with a empty array
+      setHasMore(mappedPosts.length === POSTS_PER_PAGE);
+    } catch (error) {
+      console.error("Erro ao buscar posts:", error);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
+  {/* Load initial posts */}
   useEffect(() => {
-    const filtered = posts.filter(
-      (post) =>
-        post.fields.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.fields.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredPosts(filtered);
-  }, [searchTerm, posts]);
+    fetchPosts(1);
+  }, [fetchPosts]);
+
+  {/* Inifinte scroll logic + useCallback */}
+  const loadMore = useCallback(() => {
+    if (!loading && hasMore) {
+      setPage((prev) => prev + 1);
+      fetchPosts(page + 1);
+    }
+  }, [fetchPosts, hasMore, loading, page]) // dependencies that are monitoried;
 
   return {
     searchTerm,
     handleInputChange,
-    filteredPosts,
-  }
+    loadMore,
+    loading,
+    hasMore,
+    posts
+  };
 }
