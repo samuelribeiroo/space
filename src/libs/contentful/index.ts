@@ -1,6 +1,7 @@
 import { Entry, createClient } from "contentful";
 import {
   FetchingPostError,
+  QueryParams,
   fetchContentfulPosts,
 } from "./utils";
 
@@ -11,11 +12,20 @@ export const contentfulClient = Object.freeze(
   })
 );
 
-export async function getPosts() {
+export async function getPosts(skip = 0, limit = 10, searchQuery = '') {
   try {
-    const posts = await fetchContentfulPosts({
+    const queryParams: QueryParams = {
       content_type: "blog",
-    });
+      skip,
+      limit,
+      order:'-sys.createdAt'
+    };
+
+    if(searchQuery) {
+      queryParams.query = searchQuery
+    }
+
+    const posts = await fetchContentfulPosts(queryParams)
 
     if (!posts || !posts.items)
       throw new FetchingPostError("Failed to fetch posts: No data returned.");
