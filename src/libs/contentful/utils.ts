@@ -2,8 +2,10 @@ import { Entry, EntryCollection, EntrySkeletonType } from "contentful";
 import { contentfulClient } from ".";
 import { Document } from "@contentful/rich-text-types";
 
-const SPACE_ID = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID as string as string;
-const ACCESS_TOKEN = process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN as string as string;
+const SPACE_ID = process.env
+  .NEXT_PUBLIC_CONTENTFUL_SPACE_ID as string as string;
+const ACCESS_TOKEN = process.env
+  .NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN as string as string;
 
 type PostFields = {
   title: string;
@@ -11,10 +13,11 @@ type PostFields = {
   excerpt: string;
   publishDate: string;
   body: string;
+  image: ContentfulImage
 };
 
 export interface PostEntry extends EntrySkeletonType {
-  fields: PostFields;
+  fields: PostFields; 
 }
 
 export type Post = {
@@ -27,7 +30,37 @@ export type Post = {
     excerpt: string;
     publishDate: string;
     article: Document;
+    image: string;
   };
+};
+
+export type PostEntryRecord = Entry<PostEntry>
+
+export interface PostGeneric extends EntrySkeletonType {
+  contentTypeId: string; 
+  title: string;
+  body: string;
+}
+
+type ContentfulImage = {
+  fields: {
+    file: {
+      url: string;
+    };
+  };
+};
+
+export type GetPostsProps = {
+  skip: number;
+  limit: number;
+};
+
+export type QueryParams = {
+  content_type: string;
+  skip: number;
+  limit: number;
+  order: string;
+  query?: any
 };
 
 class FetchingPostError extends Error {
@@ -55,18 +88,20 @@ contentful and transforming in a format more acceptable to FE.
 
 */
 function formatContentfulPost(entry: Entry<EntrySkeletonType>): Post {
+  const image = entry.fields.image as ContentfulImage;
+
   return {
     sys: {
-      id: entry.sys.id
+      id: entry.sys.id,
     },
     fields: {
       title: entry.fields.title as string,
       slug: entry.fields.slug as string,
       excerpt: entry.fields.excerpt as string,
       publishDate: entry.fields.publishDate as string,
-      article: entry.fields.article as Document
-      // Adicione outros campos necessários aqui
-    }
+      article: entry.fields.article as Document,
+      image: image.fields.file.url,
+    },
   };
 }
 
