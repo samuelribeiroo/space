@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Plus } from "lucide-react";
+import { ArrowRight} from "lucide-react";
 import { BlurFade } from "./ui/blur-fade";
 import Button, { SizeButton, VariantButton } from "./ui/button";
 import Link from "next/link";
@@ -15,9 +15,9 @@ const { name, role, buttonTitle1, buttonTitle2 } = data;
 const linksHref = links.map((link) => link.href);
 
 export default function Introduction() {
-  const { filteredPosts } = useFetchPosts();
+  const { posts } = useFetchPosts();
 
-  const latestPost = filteredPosts.map((post) => post.fields.title);
+  const latestPost = posts.map((post) => post.fields.title);
 
   return (
     <>
@@ -64,7 +64,7 @@ export default function Introduction() {
                 </Button>
               </Link>
 
-              <Link href={`${linksHref[0]}`}>
+              <Link href={`${linksHref[2]}`}>
                 <Button
                   variant={VariantButton.Default}
                   size={SizeButton.Default}
