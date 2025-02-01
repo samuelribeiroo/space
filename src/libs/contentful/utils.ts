@@ -3,9 +3,9 @@ import { contentfulClient } from ".";
 import { Document } from "@contentful/rich-text-types";
 
 const SPACE_ID = process.env
-  .NEXT_PUBLIC_CONTENTFUL_SPACE_ID as string as string;
+  .NEXT_PUBLIC_CONTENTFUL_SPACE_ID as string;
 const ACCESS_TOKEN = process.env
-  .NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN as string as string;
+  .NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN as string;
 
 type PostFields = {
   title: string;
