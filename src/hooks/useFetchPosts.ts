@@ -1,3 +1,4 @@
+import { QueryProps } from "@/app/components/ui/post-list-ui";
 import { getPosts } from "@/libs/contentful";
 import { Post, formatContentfulPost } from "@/libs/contentful/utils";
 import { useState, useEffect, useCallback } from "react";
@@ -5,23 +6,32 @@ import { useState, useEffect, useCallback } from "react";
 const POSTS_PER_PAGE = 10;
 
 export default function useFetchPosts() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [posts, setPosts] = useState<Post[]>([]);
-  const [page, setPage] = useState(1);
-  const [loading, setIsLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState<number>(1);
+  const [loading, setIsLoading] = useState<boolean>(false);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (
-    event
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setSearchTerm(event.target.value);
+    setSearchQuery(event.target.value);
     setPage(1);
   };
 
-  {/* 
+  const handleSearchArticle: React.ChangeEventHandler<HTMLInputElement> = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    event.preventDefault();
+    setSearchQuery(event.target.value);
+  };
+
+  {
+    /* 
     Fetch posts and memorize the reference to avoid uncessary recriation 
     and second things its calculate the logic of pagination
-    */}
+    */
+  }
   const fetchPosts = useCallback(async (pageNumber: number) => {
     try {
       setIsLoading(true);
@@ -39,25 +49,31 @@ export default function useFetchPosts() {
     }
   }, []);
 
-  {/* Load initial posts */}
+  {
+    /* Load initial posts */
+  }
   useEffect(() => {
     fetchPosts(1);
   }, [fetchPosts]);
 
-  {/* Inifinte scroll logic + useCallback */}
+  {
+    /* Inifinte scroll logic + useCallback */
+  }
   const loadMore = useCallback(() => {
     if (!loading && hasMore) {
       setPage((prev) => prev + 1);
       fetchPosts(page + 1);
     }
-  }, [fetchPosts, hasMore, loading, page]) // dependencies that are monitoried;
+  }, [fetchPosts, hasMore, loading, page]); // dependencies that are monitoried;
 
   return {
-    searchTerm,
     handleInputChange,
     loadMore,
     loading,
     hasMore,
-    posts
+    posts,
+    searchQuery,
+    setSearchQuery,
+    handleSearchArticle,
   };
 }
