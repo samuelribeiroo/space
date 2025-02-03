@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 
 function ArticleMain({ children }: PropsWithChildren) {
   return <main className="max-w-screen-xl mx-auto px-4 py-12">{children}</main>;
@@ -12,10 +12,10 @@ function ArticleCard({ children }: PropsWithChildren) {
 }
 
 type ArticleContentProps = PropsWithChildren<{
-  date: any;
+  date: string | Date;
   imageSrc: string;
   alt: string;
-  text: any;
+  text: ReactNode;
   title: string;
 }>;
 
@@ -28,7 +28,7 @@ function ArticleContent({
   return (
     <>
       <div className="text-center space-y-6 mb-12">
-        <time className="font-karla text-sm text-gray-400">{date}</time>
+        <time className="font-karla text-sm text-gray-400">{String(date)}</time>
         <h1 className="text-4xl md:text-5xl font-serif leading-tight">
           {title}
         </h1>
