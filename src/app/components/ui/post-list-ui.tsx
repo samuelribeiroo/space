@@ -16,6 +16,7 @@ import {
 } from "@/libs/contentful/utils";
 import { delayTimeout } from "@/utils/delayFn";
 import useFetchPosts from "@/hooks/useFetchPosts";
+import { publishDateFormatter } from "@/utils/date-formatter";
 
 const linksHref = links.map((link) => link.label);
 
@@ -129,24 +130,17 @@ function SectionPostList({
           />
         </div>
         <section className="section-post-grid">
-          {posts.map((post: any) => {
+          {posts.map((post: PostEntry) => {
             const { id } = post.sys;
             const { title, slug, excerpt, publishDate } = post.fields;
             const { url } = post.fields.image?.fields.file;
 
-            const formattedDate = new Date(publishDate).toLocaleDateString(
-              "pt-br",
-              {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              }
-            );
+            const formattedDate = publishDateFormatter(publishDate)
 
             return (
               <CardPost key={id}>
                 <Link
-                  href={`/posts/${slug}`}
+                  href={`/articles/${slug}`}
                   className="block space-y-3 relative z-10"
                 >
                   <CardPostContent
@@ -161,6 +155,7 @@ function SectionPostList({
             );
           })}
         </section>
+        {children}
       </main>
     </>
   );

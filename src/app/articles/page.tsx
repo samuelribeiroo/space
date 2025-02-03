@@ -9,6 +9,7 @@ import {
   CardPostContent,
   SectionPostList,
 } from "../components/ui/post-list-ui";
+import LoadingScreen from "../components/ui/loading";
 
 export default function ArticlesPage() {
   const { posts, loading, hasMore, loadMore } = useFetchPosts();
@@ -16,54 +17,38 @@ export default function ArticlesPage() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore && !loading) {
-          loadMore();
-        }
+      (entries: IntersectionObserverEntry[]) => {
+        const isSomethingToLoad =
+          entries[0].isIntersecting && hasMore && !loading;
+
+        if (isSomethingToLoad) loadMore();
       },
+
       { threshold: 1.0 }
     );
 
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
-    }
+    if (observerTarget.current) observer.observe(observerTarget.current);
 
     return () => observer.disconnect();
   }, [hasMore, loading, loadMore]);
 
   return (
+    <>
+      {loading && posts.length === 0 && <LoadingScreen fullscreen={false} />}
       <SectionPostList>
-        {posts.map((post: Post) => {
-          const { id } = post.sys;
-          const { title, slug, excerpt, publishDate, image } = post.fields;
 
-          const formattedDate = new Date(publishDate).toLocaleDateString(
-            "pt-br",
-            {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            }
-          );
+         {/* This loading was be inserted here bc in the future I'll implement a infinite-scroll feature  */}
+         {loading && posts.length > 0 && (
+          <div className="col-span-full flex justify-center py-8">
+            <LoadingScreen
+              message="Carregando mais artigos..."
+              fullscreen={false}
+            />
+          </div>
+        )}
 
-          return (
-            <CardPost key={id}>
-              <Link
-                href={`/posts/${slug}`}
-                className="block space-y-3 relative z-10"
-              >
-                <CardPostContent
-                  imageUrl={image}
-                  publishDate={formattedDate}
-                  overview={excerpt}
-                  titlePost={title}
-                  alt={title}
-                />
-              </Link>
-            </CardPost>
-          );
-        })}
-       <div ref={observerTarget} className="h-10" />
+        <div ref={observerTarget} className="h-10" />
       </SectionPostList>
+    </>
   );
 }
