@@ -1,6 +1,7 @@
 import { Entry, createClient } from "contentful";
 import {
   FetchingPostError,
+  PostEntry,
   QueryParams,
   fetchContentfulPosts,
 } from "./utils";
@@ -42,7 +43,7 @@ export async function getPosts(skip = 0, limit = 10, searchQuery = '') {
   }
 }
 
-export async function getPostByID(slug: string): Promise<Entry<any> | null> {
+export async function getPostByID(slug: string): Promise<Entry<PostEntry> | null> {
   try {
     const response = await fetchContentfulPosts({
       content_type: "blog",
@@ -55,7 +56,7 @@ export async function getPostByID(slug: string): Promise<Entry<any> | null> {
         `Failed to fetch post with slug "${slug}": No data returned.`
       );
 
-    if (response.items.length > 0) return response.items[0] as Entry<any>; 
+    if (response.items.length > 0) return response.items[0] as Entry<PostEntry>; 
     
     return null;
   } catch (error) {

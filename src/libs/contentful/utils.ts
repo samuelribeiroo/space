@@ -1,6 +1,7 @@
 import { Entry, EntryCollection, EntrySkeletonType } from "contentful";
 import { contentfulClient } from ".";
 import { Document } from "@contentful/rich-text-types";
+import { ReactNode } from "react";
 
 const SPACE_ID = process.env
   .NEXT_PUBLIC_CONTENTFUL_SPACE_ID as string;
@@ -17,6 +18,7 @@ type PostFields = {
 };
 
 export interface PostEntry extends EntrySkeletonType {
+  sys: { id: string; };
   fields: PostFields; 
 }
 
@@ -60,7 +62,7 @@ export type QueryParams = {
   skip: number;
   limit: number;
   order: string;
-  query?: any
+  query?: ReactNode
 };
 
 class FetchingPostError extends Error {
@@ -72,7 +74,7 @@ class FetchingPostError extends Error {
 
 /* Generic Function */
 async function fetchContentfulPosts<T extends EntrySkeletonType>(
-  query: Record<string, any>
+  query: Record<string, any> // any bc it's out control what will come up to object
 ): Promise<EntryCollection<T>> {
   return contentfulClient.getEntries<T>(query); // geEntries -> select all post or posts based on a id.
 }
