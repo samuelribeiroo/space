@@ -19,7 +19,8 @@ type PostFields = {
 
 export interface PostEntry extends EntrySkeletonType {
   sys: { id: string; };
-  fields: PostFields; 
+  fields: PostFields;
+  contentTypeId: 'blog' 
 }
 
 export type Post = {
