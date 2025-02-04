@@ -2,9 +2,17 @@
 
 import Link from "next/link";
 import { PropsWithChildren, ReactNode } from "react";
+import Footer from "./footer";
 
 function ArticleMain({ children }: PropsWithChildren) {
-  return <main className="max-w-screen-xl mx-auto px-4 py-12">{children}</main>;
+  return (
+    <>
+    <main className="max-w-screen-xl mx-auto px-4 py-12 flex flex-col">
+    {children}
+    </main>
+    <Footer />
+    </>
+  );
 }
 
 function ArticleCard({ children }: PropsWithChildren) {
