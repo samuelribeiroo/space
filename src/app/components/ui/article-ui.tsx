@@ -7,10 +7,10 @@ import Footer from "./footer";
 function ArticleMain({ children }: PropsWithChildren) {
   return (
     <>
-    <main className="max-w-screen-xl mx-auto px-4 py-12 flex flex-col">
-    {children}
-    </main>
-    <Footer />
+      <main className="max-w-screen-xl mx-auto px-4 py-12 flex flex-col">
+        {children}
+      </main>
+      <Footer />
     </>
   );
 }
@@ -27,12 +27,7 @@ type ArticleContentProps = PropsWithChildren<{
   title: string;
 }>;
 
-function ArticleContent({
-  title,
-  date,
-  imageSrc,
-  text,
-}: ArticleContentProps) {
+function ArticleContent({ title, date, imageSrc, text }: ArticleContentProps) {
   return (
     <>
       <div className="text-center space-y-6 mb-12">
@@ -64,4 +59,20 @@ function ArticleContent({
   );
 }
 
-export { ArticleMain, ArticleCard, ArticleContent };
+type NotFoundedProps = {
+  message: ReactNode
+}
+
+function NotFounded({ message }: NotFoundedProps) {
+  return (
+    <>
+      <div className="text-left py-8">
+        <h2 className="text-xl font-karla text-zinc-400 font-normal">
+          {message}
+        </h2>
+      </div>
+    </>
+  );
+}
+
+export { ArticleMain, ArticleCard, ArticleContent, NotFounded };
