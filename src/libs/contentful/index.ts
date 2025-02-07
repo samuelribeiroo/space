@@ -4,6 +4,7 @@ import {
   PostEntry,
   QueryParams,
   fetchContentfulPosts,
+  FetchContentfulErrors,
 } from "./utils";
 
 export const contentfulClient = Object.freeze(
@@ -13,37 +14,37 @@ export const contentfulClient = Object.freeze(
   })
 );
 
-export async function getPosts(skip = 0, limit = 10, searchQuery = '') {
+export async function getPosts(skip = 0, limit = 10, searchQuery = "") {
   try {
     const queryParams: QueryParams = {
       content_type: "blog",
       skip,
       limit,
-      order:'-sys.createdAt'
+      order: "-sys.createdAt",
     };
 
-    if(searchQuery) {
-      queryParams.query = searchQuery
-    }
+    searchQuery ? (queryParams.query = searchQuery) : null;
 
-    const posts = await fetchContentfulPosts(queryParams)
+    const posts = await fetchContentfulPosts(queryParams);
 
     if (!posts || !posts.items)
-      throw new FetchingPostError("Failed to fetch posts: No data returned.");
+      throw new FetchingPostError(FetchContentfulErrors.FETCH_FAILED);
 
     return posts.items;
   } catch (error) {
     console.error(
       error instanceof FetchingPostError
         ? error.message
-        : "Unexpected error fetching posts:",
+        : FetchContentfulErrors.UNEXPECTED_ERROR,
       error
     );
     return [];
   }
 }
 
-export async function getPostByID(slug: string): Promise<Entry<PostEntry> | null> {
+export async function getPostBySlug(
+  slug: string
+): Promise<Entry<PostEntry> | null> {
   try {
     const response = await fetchContentfulPosts({
       content_type: "blog",
@@ -53,17 +54,17 @@ export async function getPostByID(slug: string): Promise<Entry<PostEntry> | null
 
     if (!response)
       throw new FetchingPostError(
-        `Failed to fetch post with slug "${slug}": No data returned.`
+        `${FetchContentfulErrors.FETCH_FAILED_SLUG} ${slug}`
       );
 
-    if (response.items.length > 0) return response.items[0] as Entry<PostEntry>; 
-    
+    if (response.items.length > 0) return response.items[0] as Entry<PostEntry>;
+
     return null;
   } catch (error) {
     console.error(
       error instanceof FetchingPostError
         ? error.message
-        : `Unexpected error fetching post with slug "${slug}":`,
+        : FetchContentfulErrors.UNEXPECTED_ERROR,
       error
     );
     return null;

@@ -3,10 +3,8 @@ import { contentfulClient } from ".";
 import { Document } from "@contentful/rich-text-types";
 import { ReactNode } from "react";
 
-const SPACE_ID = process.env
-  .NEXT_PUBLIC_CONTENTFUL_SPACE_ID as string;
-const ACCESS_TOKEN = process.env
-  .NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN as string;
+const SPACE_ID = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID as string;
+const ACCESS_TOKEN = process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN as string;
 
 type PostFields = {
   title: string;
@@ -14,13 +12,13 @@ type PostFields = {
   excerpt: string;
   publishDate: string;
   body: string;
-  image: ContentfulImage
+  image: ContentfulImage;
 };
 
 export interface PostEntry extends EntrySkeletonType {
-  sys: { id: string; };
+  sys: { id: string };
   fields: PostFields;
-  contentTypeId: 'blog' 
+  contentTypeId: "blog";
 }
 
 export type Post = {
@@ -37,10 +35,10 @@ export type Post = {
   };
 };
 
-export type PostEntryRecord = Entry<PostEntry>
+export type PostEntryRecord = Entry<PostEntry>;
 
 export interface PostGeneric extends EntrySkeletonType {
-  contentTypeId: string; 
+  contentTypeId: string;
   title: string;
   body: string;
 }
@@ -63,8 +61,14 @@ export type QueryParams = {
   skip: number;
   limit: number;
   order: string;
-  query?: ReactNode
+  query?: ReactNode;
 };
+
+export enum FetchContentfulErrors {
+  UNEXPECTED_ERROR = "Unexpected error fetching posts:",
+  FETCH_FAILED = "Failed to fetch posts: No data returned.",
+  FETCH_FAILED_SLUG = "No data returned. Failed to fetch post with slug: ",
+}
 
 class FetchingPostError extends Error {
   constructor(message: string) {
