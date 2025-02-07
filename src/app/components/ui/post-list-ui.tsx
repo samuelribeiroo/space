@@ -2,7 +2,7 @@
 
 import { links } from "@/constants/data";
 import useDismissOnClickOrEscape from "@/hooks/useDismissOnClickOrEscape";
-import { Search } from "lucide-react";
+import { Search, Calendar, Newspaper   } from "lucide-react";
 import Link from "next/link";
 import { PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import Input from "./input";
@@ -192,9 +192,14 @@ function CardPostContent({
         <p className="text-zinc-400 text-sm md:text-base mb-4 line-clamp-2">
           {overview}
         </p>
-        <div className="flex items-center text-xs md:text-sm text-zinc-500 group-hover:text-zinc-400 transition-colors">
+        <div className="flex items-center gap-2 text-xs md:text-sm text-zinc-500 group-hover:text-zinc-400 transition-colors">
+          <Calendar className="size-4"/>
           <span>{publishDate}</span>
         </div>
+         <span className="flex items-center gap-2">
+         <Newspaper className="size-4 text-zinc-500/60"/>
+         <h4 className="text-zinc-400 text-sm tracking-wide hover:text-white">Leia o artigo</h4>
+         </span>
       </div>
     </>
   );
