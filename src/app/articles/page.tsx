@@ -34,7 +34,7 @@ export default function ArticlesPage() {
 
   return (
     <>
-      {loading && posts.length === 0 && <LoadingScreen fullscreen={false} />}
+      {loading && posts.length === 0 && <LoadingScreen fullscreen={true} />}
       <SectionPostList>
 
          {/* This loading was be inserted here bc in the future I'll implement a infinite-scroll feature  */}

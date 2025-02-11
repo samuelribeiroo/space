@@ -15,7 +15,7 @@ export default function LoadingScreen({
     <>
       <div
         className={`${
-          fullscreen ? "fixed inset-0 z-50 bg-red-500 backdrop-blur-sm" : ""
+          fullscreen ? "fixed inset-0 z-50 backdrop-blur-sm" : ""
         } flex items-center justify-center mt-48`}
       >
         <div className="text-center space-y-4">
