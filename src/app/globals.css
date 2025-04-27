@@ -8,6 +8,8 @@
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
+    --gradient-primary: radial-gradient(circle 500px at 50% 200px, #e0e0e0, transparent);
+    --gradient-secondary: radial-gradient(ellipse 80% 80% at 50% -20%, rgba(120, 119, 198, 0.1), rgba(255, 255, 255, 0));
 
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
@@ -40,6 +42,8 @@
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
+    --gradient-primary: radial-gradient(circle 500px at 50% 200px, #3e3e3e, transparent);
+    --gradient-secondary: radial-gradient(ellipse 80% 80% at 50% -20%, rgba(120, 119, 198, 0.3), rgba(255, 255, 255, 0));
 
     --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -67,37 +71,131 @@
     --ring: 0 0% 83.1%;
   }
 
+  body {
+    background-color: hsl(var(--background));
+    font-family: 'Inter', -apple-system, Arial, sans-serif;
+    text-rendering: optimizeLegibility;
+    font-synthesis: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-adjust: 100%;
+    image-rendering: optimizeQuality;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  .background-gradient {
+    background: var(--gradient-primary);
+  }
+
+  .background-radial {
+    background: var(--gradient-secondary);
+  }
+}
+
+@layer utilities {
+  .d-flex {
+    @apply flex justify-between items-center;
+  }
+
+  .d-flex-col {
+    @apply flex flex-col
+  }
+
+  .size-1_2rem {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  .border-input {
+    border-color: hsl(var(--input));
+  }
+
+  .text-muted-foreground {
+    color: hsl(var(--muted-foreground));
+  }
+
+  .bg-background {
+    background-color: transparent;
+  }
+
+
+  .ring-ring {
+    ring-color: hsl(var(--ring));
+  }
+
+
+  .ring-offset-background {
+    ring-offset-color: hsl(var(--background));
+  }
+
+  .badge-style {
+    @apply inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2
+  }
+
+  .projects-grid-container {
+    @apply grid gap-8 md:gap-12 items-center
+  }
+
+  .layout-image-right {
+    @apply md:grid-cols-[1fr,1.5fr]
+  }
+
+  .layout-image-left {
+    @apply md:grid-cols-[1.5fr,1fr]
+  }
+
+  .border-dashed-grid {
+    @apply border-b border-dashed border-gray-800
+  }
 }
 
 @layer components {
+  .dynamic-background {
+    @apply absolute top-0 z-[-2] h-screen w-screen bg-[hsl(var(--background))];
+  }
+
   .header-style {
     @apply fixed top-0 left-0 right-0 z-50 border-b border-lightGray backdrop-blur-sm;
-  
   }
-  
+
   .nav-style {
-    @apply container flex h-16 items-center justify-between
+    @apply font-karla container flex h-16 items-center justify-between;
   }
-  
+
+  .input-style {
+    @apply flex h-10 w-64 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50
+  }
+
   .profile-spinner {
-    @apply transition-transform duration-500 ease-in group-hover:rotate-[360deg]
+    @apply transition-transform duration-500 ease-in group-hover:rotate-[360deg];
   }
 
   .mobile-menu {
-    @apply container flex flex-col space-y-4 p-4
+    @apply container flex flex-col space-y-4 p-4;
   }
-}
 
+  .introduction-style {
+    @apply font-karla mt-40 sm:mt-80 md:mt-40 lg:mt-40 flex flex-col items-center text-center px-4 mx-auto md:items-start md:text-left md:ml-20 lg:ml-10
+  }
 
-body {
-  font-family: 'Inter', -apple-system, Arial, sans-serif;
-  text-rendering: optimizeLegibility;
-  font-synthesis: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-adjust: 100%;
-  image-rendering: optimizeQuality;
-  overflow-x: hidden;
-  font-synthesis: none;
-  scroll-behavior: smooth;
+  .introduction-content-paragraph {
+    @apply leading-relaxed text-gray-300
+  }
+
+  .button-hover {
+    @apply font-sans hover:brightness-75 transition-all
+  }
+
+  .article-card {
+    @apply bg-[#0A0A0A] rounded-lg overflow-hidden transition-all duration-300 hover:bg-zinc-800/50 transform-gpu mx-auto hover:scale-[1.015] active:scale-[0.99] relative flex-1 min-w-0 w-full;
+  }
+
+  .card-post-content {
+    @apply relative overflow-hidden aspect-video md:aspect-[3/1] lg:aspect-[2.5/1]
+  }
+
+  .section-post-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-5
+  }
 }
